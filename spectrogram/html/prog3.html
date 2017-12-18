@@ -1,0 +1,388 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Spectrogram Analysis and Applicaitons</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-12-08"><meta name="DC.source" content="prog3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Spectrogram Analysis and Applicaitons</h1><p>Nikola Janjusevic</p><pre class="codeinput"><span class="comment">% 1. Frequency Modulated Signals</span>
+fs = 5e6;
+t0 = 200e-6;
+u = 4e9;
+t = 0:1/fs:t0;
+x = cos(2*pi*u*t.^2);
+figure;
+spectrogram(x,triang(256),255,<span class="string">'yaxis'</span>);
+
+<span class="comment">% 2. Inst Freq:</span>
+f1 = u*t;
+f2 = 2*u*t;
+inst_freq1 = f1(end)/(fs/2)
+inst_freq2 = f2(end)/(fs/2)
+
+<span class="comment">% 3.</span>
+u2 = 1e10;
+x2 = cos(2*pi*u2*t.^2);
+figure;
+spectrogram(x2,triang(256),255,<span class="string">'yaxis'</span>);
+
+<span class="comment">% the second chirp has a faster rate and thus a</span>
+<span class="comment">% steeper slope on the spectrogram</span>
+</pre><pre class="codeoutput">
+inst_freq1 =
+
+    0.3200
+
+
+inst_freq2 =
+
+    0.6400
+
+</pre><img vspace="5" hspace="5" src="prog3_01.png" alt=""> <img vspace="5" hspace="5" src="prog3_02.png" alt=""> <pre class="codeinput">load(<span class="string">'s1.mat'</span>);
+load(<span class="string">'s5.mat'</span>);
+
+<span class="comment">% 4. High Frequency Resolution</span>
+L = 2^12;
+ol = L-1;
+N = L;
+
+figure(<span class="string">'name'</span>, <span class="string">"s1 High Frequency Resolution"</span>);
+subplot(2,1,1);
+spectrogram(s1,triang(L),ol,N,<span class="string">'yaxis'</span>);
+title(<span class="string">"s1 (woman's voice)"</span>);
+
+subplot(2,1,2);
+stem(s1);
+title(<span class="string">"s1 time"</span>);
+
+figure(<span class="string">'name'</span>, <span class="string">"s5 High Frequency Resolution"</span>);
+subplot(2,1,1);
+spectrogram(s5,triang(L),ol,N,<span class="string">'yaxis'</span>);
+title(<span class="string">"s5 (man's voice)"</span>);
+
+subplot(2,1,2);
+stem(s5);
+title(<span class="string">"s5 time"</span>);
+</pre><img vspace="5" hspace="5" src="prog3_03.png" alt=""> <img vspace="5" hspace="5" src="prog3_04.png" alt=""> <pre class="codeinput">load(<span class="string">'s1.mat'</span>);
+load(<span class="string">'s5.mat'</span>);
+
+<span class="comment">% 5. High Temporal Resolution</span>
+L = 2^8;
+ol = L/2;
+N = L;
+
+figure(<span class="string">'name'</span>, <span class="string">"s1 High Temporal Resolution"</span>);
+subplot(2,1,1);
+spectrogram(s1,triang(L),ol,N,<span class="string">'yaxis'</span>);
+title(<span class="string">"s1 (woman's voice)"</span>);
+
+subplot(2,1,2);
+stem(s1);
+title(<span class="string">"s1 time"</span>);
+
+figure(<span class="string">'name'</span>, <span class="string">"s5 High Temporal Resolution"</span>);
+subplot(2,1,1);
+spectrogram(s5,triang(L),ol,N,<span class="string">'yaxis'</span>);
+title(<span class="string">"s5 (man's voice)"</span>);
+
+subplot(2,1,2);
+stem(s5);
+title(<span class="string">"s5 time"</span>);
+</pre><img vspace="5" hspace="5" src="prog3_05.png" alt=""> <img vspace="5" hspace="5" src="prog3_06.png" alt=""> <pre class="codeinput">close <span class="string">all</span>;
+
+<span class="comment">%6. Inverse STFT</span>
+
+load(<span class="string">"vowels.mat"</span>);
+
+N = 1024;
+L = 256;
+ol = 128;
+
+<span class="comment">% padding to a power of 2</span>
+p = nextpow2(length(vowels));
+vowels = padarray(vowels,2^p-length(vowels),0,<span class="string">'post'</span>);
+
+[S,F,T] = spectrogram(vowels,rectwin(L),ol,N,<span class="string">'yaxis'</span>);
+
+x = istft(S,L,ol,N);
+
+figure(<span class="string">'name'</span>,<span class="string">'Part 6: Modified STFT'</span>);
+subplot(3,1,1);
+plot(vowels);
+xlim([0 2^13]);
+ylim([-5000 5000]);
+title(<span class="string">"Vowels"</span>);
+
+subplot(3,1,2);
+plot(x);
+xlim([0 2^13]);
+ylim([-5000 5000]);
+title(<span class="string">"Inverse STFT of Vowels"</span>);
+
+subplot(3,1,3);
+plot((vowels.'-x(1:length(vowels))).^2);
+xlim([0 2^13]);
+title(<span class="string">"Difference between"</span>);
+
+<span class="comment">% 7 Change of Rate</span>
+
+S3 = downsample(S.',2);
+S3 = S3.';
+x3 = istft(S3,L,ol,N);
+
+figure(<span class="string">'name'</span>,<span class="string">'7: Change of Rate'</span>);
+subplot(2,1,1);
+plot(vowels);
+xlim([0 2^13]);
+ylim([-5000 5000]);
+title(<span class="string">"Vowels"</span>);
+
+subplot(2,1,2);
+plot(x3);
+xlim([0 2^12]);
+title(<span class="string">"Vowels Compressed by 2"</span>);
+
+<span class="comment">% Inverese STFT function</span>
+<span class="keyword">function</span> x0 = istft(S,L,ol,N)
+<span class="comment">% mirror S making it 1024 point from 512</span>
+n = length(S(:,1));
+c = length(S(1,:));
+
+S2 = zeros(N,c);
+S2(1:n,:) = S(1:n,:);
+S2(n-1:end,:) = S(end:-1:1,:);
+
+X = ifft(S2,N,1);
+x0 = zeros(1,(c+1)*ol);
+
+<span class="keyword">for</span> i=1:c
+index = (i-1)*ol+1;
+x0(index:index+L-1) = x0(index:index+L-1) + real(X(1:L,i).');
+<span class="keyword">end</span>
+
+x0(ol+1:end-ol) = x0(ol+1:end-ol)*0.5;
+x = x0;
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="prog3_07.png" alt=""> <img vspace="5" hspace="5" src="prog3_08.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Spectrogram Analysis and Applicaitons
+% Nikola Janjusevic 
+
+% 1. Frequency Modulated Signals
+fs = 5e6;
+t0 = 200e-6;
+u = 4e9;
+t = 0:1/fs:t0;
+x = cos(2*pi*u*t.^2);
+figure;
+spectrogram(x,triang(256),255,'yaxis');
+
+% 2. Inst Freq:
+f1 = u*t;
+f2 = 2*u*t;
+inst_freq1 = f1(end)/(fs/2)  
+inst_freq2 = f2(end)/(fs/2)
+
+% 3.
+u2 = 1e10;
+x2 = cos(2*pi*u2*t.^2);
+figure;
+spectrogram(x2,triang(256),255,'yaxis');
+
+% the second chirp has a faster rate and thus a 
+% steeper slope on the spectrogram
+
+%%
+
+load('s1.mat');
+load('s5.mat');
+
+% 4. High Frequency Resolution
+L = 2^12;
+ol = L-1;
+N = L;
+
+figure('name', "s1 High Frequency Resolution");
+subplot(2,1,1);
+spectrogram(s1,triang(L),ol,N,'yaxis');
+title("s1 (woman's voice)");
+
+subplot(2,1,2);
+stem(s1);
+title("s1 time");
+
+figure('name', "s5 High Frequency Resolution");
+subplot(2,1,1);
+spectrogram(s5,triang(L),ol,N,'yaxis');
+title("s5 (man's voice)");
+
+subplot(2,1,2);
+stem(s5);
+title("s5 time");
+
+%%
+load('s1.mat');
+load('s5.mat');
+
+% 5. High Temporal Resolution
+L = 2^8;
+ol = L/2;
+N = L;
+
+figure('name', "s1 High Temporal Resolution");
+subplot(2,1,1);
+spectrogram(s1,triang(L),ol,N,'yaxis');
+title("s1 (woman's voice)");
+
+subplot(2,1,2);
+stem(s1);
+title("s1 time");
+
+figure('name', "s5 High Temporal Resolution");
+subplot(2,1,1);
+spectrogram(s5,triang(L),ol,N,'yaxis');
+title("s5 (man's voice)");
+
+subplot(2,1,2);
+stem(s5);
+title("s5 time");
+
+%%
+close all;
+
+%6. Inverse STFT
+
+load("vowels.mat");
+
+N = 1024;
+L = 256;
+ol = 128;
+
+% padding to a power of 2
+p = nextpow2(length(vowels));
+vowels = padarray(vowels,2^p-length(vowels),0,'post');
+
+[S,F,T] = spectrogram(vowels,rectwin(L),ol,N,'yaxis');
+
+x = istft(S,L,ol,N);
+
+figure('name','Part 6: Modified STFT');
+subplot(3,1,1);
+plot(vowels);
+xlim([0 2^13]);
+ylim([-5000 5000]);
+title("Vowels");
+
+subplot(3,1,2);
+plot(x);
+xlim([0 2^13]);
+ylim([-5000 5000]);
+title("Inverse STFT of Vowels");
+
+subplot(3,1,3);
+plot((vowels.'-x(1:length(vowels))).^2);
+xlim([0 2^13]);
+title("Difference between");
+
+% 7 Change of Rate
+
+S3 = downsample(S.',2);
+S3 = S3.';
+x3 = istft(S3,L,ol,N);
+
+figure('name','7: Change of Rate');
+subplot(2,1,1);
+plot(vowels);
+xlim([0 2^13]);
+ylim([-5000 5000]);
+title("Vowels");
+
+subplot(2,1,2);
+plot(x3);
+xlim([0 2^12]);
+title("Vowels Compressed by 2");
+
+% Inverese STFT function
+function x0 = istft(S,L,ol,N)
+% mirror S making it 1024 point from 512
+n = length(S(:,1));
+c = length(S(1,:));
+
+S2 = zeros(N,c);
+S2(1:n,:) = S(1:n,:);
+S2(n-1:end,:) = S(end:-1:1,:);
+
+X = ifft(S2,N,1);
+x0 = zeros(1,(c+1)*ol);
+
+for i=1:c
+index = (i-1)*ol+1;
+x0(index:index+L-1) = x0(index:index+L-1) + real(X(1:L,i).');
+end
+
+x0(ol+1:end-ol) = x0(ol+1:end-ol)*0.5;
+x = x0;
+end
+##### SOURCE END #####
+--></body></html>
